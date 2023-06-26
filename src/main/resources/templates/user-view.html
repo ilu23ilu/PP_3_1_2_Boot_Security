@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <style> body {
+        font-family: Arial, sans-serif;
+    }
+
+    h2 {
+        color: green;
+    }
+
+    table {
+        width: 50%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background-color: green;
+        color: white;
+        padding: 10px;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    .update-button {
+        background-color: green;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .delete-button {
+        background-color: green;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .add-button {
+        background-color: green;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .add-button:hover, .update-button:hover, .delete-button:hover {
+        background-color: darkgreen;
+    } </style>
+</head>
+<body><h1>All Users</h1>
+<br>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Email</th>
+<!--        <th>Role</th>-->
+        <th>Password</th>
+        <th>Operations</th>
+    </tr>
+    <tr th:each="user : ${allUsers}">
+        <td th:text="${user.firstName}"></td>
+        <td th:text="${user.lastName}"></td>
+        <td th:text="${user.email}"></td>
+<!--        <td th:text="${user.roles}"></td>-->
+        <td th:text="${user.password}"></td>
+        <td><input type="button" value="Update"
+                   th:onclick="|window.location.href = '/admin/updateInfo?userId=${user.id}'|"/>
+            <input type="button" value="Delete"
+                   th:onclick="|window.location.href = '/admin/deleteUser?userId=${user.id}'|"/></td>
+    </tr>
+</table>
+<br>
+<input type="button" value="Add" onclick="window.location.href = 'addNewUser'"/>
+</body>
+</html>
