@@ -79,5 +79,10 @@
 </table>
 <br>
 <input type="button" value="Add" onclick="window.location.href = 'addNewUser'"/>
+<br>
+<br>
+<form th:action="@{/logout}" method="post">
+    <button type="submit" class="logout-button">Выход из системы</button>
+</form>
 </body>
 </html>

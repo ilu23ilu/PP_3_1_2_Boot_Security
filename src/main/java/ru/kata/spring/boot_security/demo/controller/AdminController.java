@@ -1,30 +1,29 @@
 package ru.kata.spring.boot_security.demo.controller;
 ;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import ru.kata.spring.boot_security.demo.dao.RoleRepository;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/")
-public class Controller {
+public class AdminController {
 
     private final UserService userService;
-    private final RoleRepository roleRepository;
 
-    public Controller(UserService userService, RoleRepository roleRepository) {
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
     }
     @GetMapping("/admin")
     public String getAdminPage(Principal principal, Model model) {
@@ -45,17 +44,9 @@ public class Controller {
         return "user-info";
     }
     @PostMapping("/admin/addNewUser")
-    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @RequestParam(value = "roles", required = false) List<String> roles) {
+    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "user-info";
-        }
-        for (String roleName : roles) {
-            Role role = roleRepository.findByName(roleName);
-            if (role == null) {
-                role = new Role(roleName);
-                roleRepository.save(role);
-            }
-            user.getRoles().add(role);
         }
         userService.saveUser(user);
         return "redirect:/admin/allUsers";
@@ -69,20 +60,23 @@ public class Controller {
 //        mav.addObject("allRoles", roles);
 //        return mav;
 //    }
-    @PostMapping("/admin/updateInfo")
+    @GetMapping("/admin/updateInfo")
     public String updateUser(@RequestParam("userId") long id, Model model) {
         User user = userService.getUser(id);
         model.addAttribute("user", user);
         return "user-info";
     }
-    @DeleteMapping ("/admin/deleteUser")
+    @GetMapping ("/admin/deleteUser")
     public String deleteUser(@RequestParam("userId") long id) {
         userService.deleteUser(id);
         return "redirect:/admin/allUsers";
     }
-    @GetMapping("/user")
-    public String getUserPage(Principal principal, Model model) {
-        model.addAttribute("user", userService.findByEmail(principal.getName()));
-        return "user";
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(httpServletRequest, httpServletResponse, authentication);
+        }
+        return "redirect:/logout";
     }
 }

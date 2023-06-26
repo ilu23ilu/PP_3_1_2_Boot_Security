@@ -3,6 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>User Information</title>
+    <style>
+        body {
+            background-color: #f0f8f0;
+            color: #000;
+            font-family: Arial, sans-serif;
+        }
+
+        h1, h2 {
+            color: #008000;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li strong {
+            font-weight: bold;
+        }
+
+        .logout-button {
+            background-color: #008000;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background-color: #006400;
+        }
+    </style>
 </head>
 <body>
 <h1>Welcome, <span th:text="${user.firstName}"></span>!</h1>
@@ -12,5 +45,9 @@
     <li><strong>Name:</strong> <span th:text="${user.firstName}"></span></li>
     <li><strong>Last Name:</strong> <span th:text="${user.lastName}"></span></li>
 </ul>
+<br>
+<form th:action="@{/logout}" method="post">
+    <button type="submit" class="logout-button">Выход из системы</button>
+</form>
 </body>
 </html>
