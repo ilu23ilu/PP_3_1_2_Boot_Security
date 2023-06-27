@@ -7,10 +7,10 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public class UserRepositoryImpl implements UserRepository {
+public class UserDaoImpl implements UserDao {
     private final EntityManager entityManager;
 
-    public UserRepositoryImpl(EntityManager entityManager) {
+    public UserDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
