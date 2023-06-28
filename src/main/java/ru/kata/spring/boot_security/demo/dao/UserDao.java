@@ -8,9 +8,13 @@ import java.util.List;
 
 public interface UserDao {
     List<User> getAllUsers();
+
     void saveUser(User user);
+
     User getUser(long id);
+
     void deleteUser(long id);
+
     @Query("Select u from User u left join fetch u.roles where u.email=:email")
     User findByEmail(String email);
 }

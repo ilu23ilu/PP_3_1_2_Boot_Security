@@ -61,8 +61,8 @@
         <th>Name</th>
         <th>Surname</th>
         <th>Email</th>
-<!--        <th>Role</th>-->
         <th>Password</th>
+        <th>Role</th>
         <th>Operations</th>
     </tr>
     <tr th:each="user : ${allUsers}">
@@ -70,8 +70,15 @@
         <td th:text="${user.lastName}"></td>
         <td th:text="${user.email}"></td>
         <td th:text="${user.password}"></td>
-        <td><input type="button" value="Update"
-                   th:onclick="|window.location.href = '/admin/updateInfo?userId=${user.id}'|"/>
+        <td>
+            <ul>
+                <li th:each="role :${user.roles}" th:text="${role.name}"></li>
+            </ul>
+        </td>
+        <td>
+            <form th:action="@{/admin/{id}/updateInfo(id=${user.id})}" method="get">
+                <input type="submit" value="Update" class="update-button"/>
+            </form>
             <input type="button" value="Delete"
                    th:onclick="|window.location.href = '/admin/deleteUser?userId=${user.id}'|"/></td>
     </tr>

@@ -36,6 +36,7 @@ public class UserDaoImpl implements UserDao {
                 .setParameter("userId", id)
                 .executeUpdate();
     }
+
     @Override
     public User findByEmail(String email) {
         return entityManager.createQuery("select u from User u where u.email = :email", User.class)

@@ -2,7 +2,6 @@ package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.models.Role;
-import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -20,5 +19,10 @@ public class RoleDaoImpl implements RoleDao {
     public List<Role> getAllRoles() {
         return entityManager.createQuery("Select distinct r from User u join u.roles r", Role.class)
                 .getResultList();
+    }
+
+    @Override
+    public Role getRole(int id) {
+        return entityManager.find(Role.class, id);
     }
 }

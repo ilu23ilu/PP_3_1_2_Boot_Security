@@ -3,85 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <title>Users Info</title>
-    <style> body {
-        font-family: Arial, sans-serif;
-        background-color: #e6f5e6;
-    }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6f5e6;
+        }
 
-    h2 {
-        color: #009933;
-    }
+        h2 {
+            color: #009933;
+        }
 
-    form {
-        width: 400px;
-        background-color: #f0f5f0;
-        padding: 20px;
-        border-radius: 10px;
-    }
+        form {
+            width: 400px;
+            background-color: #f0f5f0;
+            padding: 20px;
+            border-radius: 10px;
+        }
 
-    input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #cccccc;
-        border-radius: 5px;
-    }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
 
-    input[type="submit"] {
-        background-color: #009933;
-        color: #ffffff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+        input[type="submit"] {
+            background-color: #009933;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    input[type="submit"]:hover {
-        background-color: #00802b;
-    } </style>
+        input[type="submit"]:hover {
+            background-color: #00802b;
+        }
+    </style>
 </head>
 <body>
 <h2 style="text-align: center;">Users Info</h2>
 <br>
-<form action = "#" th:method="post" th:action="@{/admin/addNewUser}" th:object="${user}" style="margin: 0 auto;">
-    <input type="hidden" th:field="*{id}"/>
+<form th:action="@{/admin/addNewUser}" method="post" style="margin: 0 auto;">
     <label style="color: #009933;">Name:</label>
     <label>
-        <input type="text" th:field="*{firstName}" placeholder="Enter name"/>
+        <input type="text" name="firstName" placeholder="Enter name"/>
     </label>
     <br>
     <label style="color: #009933;">Surname:</label>
     <label>
-        <input type="text" th:field="*{lastName}" placeholder="Enter surname"/>
+        <input type="text" name="lastName" placeholder="Enter surname"/>
     </label>
     <br>
     <label style="color: #009933;">Email:</label>
     <label>
-        <input type="text" th:field="*{email}" placeholder="Enter email"/>
+        <input type="text" name="email" placeholder="Enter email"/>
     </label>
     <br>
     <label style="color: #009933;">Password:</label>
     <label>
-        <input type="text" th:field="*{password}" placeholder="Enter password"/>
+        <input type="text" name="password" placeholder="Enter password"/>
     </label>
     <br>
-<!--    <label>Roles:</label>-->
-<!--    <input type="checkbox" id="role_user" name="roles" value="USER">-->
-<!--    <label for="role_user">User</label>-->
-<!--    <input type="checkbox" id="role_admin" name="roles" value="ADMIN">-->
-<!--    <label for="role_admin">Admin</label>-->
-    <!--    <p>-->
-    <!--        <label>Roles:-->
-    <!--            <input type="checkbox" name="roles"-->
-    <!--                   th:each="role : ${allRoles}"-->
-    <!--                   th:text="${role.name}"-->
-    <!--                   th:value="${role.id}"-->
-    <!--                   th:field="*{roles}"-->
-    <!--            />-->
-    <!--        </label>-->
-    <!--    </p>-->
+    <div>
+        <label style="color: #009933;">Roles:</label>
+        <label>
+            <select name="checkedRoles" multiple="multiple">
+                <option th:each="role : ${rolesList}" th:value="${role.id}" th:text="${role.name}"></option>
+            </select>
+        </label>
+    </div>
     <br>
-    <input type="submit" value="OK" onclick="window.location.href = 'allUsers'">
+    <input type="submit" value="OK">
 </form>
 <br>
 </body>
