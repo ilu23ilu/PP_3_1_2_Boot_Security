@@ -69,7 +69,7 @@ public class AdminController {
         user.setId(id);
         Role role = roleService.getRole(roleId);
         user.setRoles(Collections.singletonList(role));
-        userService.saveUser(user);
+        userService.updateUser(user);
         return "redirect:/admin/allUsers";
     }
 
