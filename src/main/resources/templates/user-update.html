@@ -43,35 +43,36 @@
 <body>
 <h2 style="text-align: center;">Users Info</h2>
 <br>
-<form action="#" th:method="post" th:action="@{/admin/addNewUser}" th:object="${user}" style="margin: 0 auto;">
+<form action = "#" th:method="post" th:action="@{/admin/updateInform/{getId}(getId=${user.id})}" th:object="${user}" style="margin: 0 auto;">
     <input type="hidden" th:field="*{id}"/>
     <label style="color: #009933;">Name:</label>
     <label>
-        <input type="text" th:field="*{firstName}" placeholder="Enter name"/>
+        <input type="text" th:field="*{firstName}" required th:value="${user.firstName}" placeholder="Enter name"/>
     </label>
     <br>
     <label style="color: #009933;">Surname:</label>
     <label>
-        <input type="text" th:field="*{lastName}" placeholder="Enter surname"/>
+        <input type="text" th:field="*{lastName}" required th:value="${user.lastName}" placeholder="Enter surname"/>
     </label>
     <br>
     <label style="color: #009933;">Email:</label>
     <label>
-        <input type="text" th:field="*{email}" placeholder="Enter email"/>
+        <input type="text" th:field="*{email}" required th:value="${user.email}" placeholder="Enter email"/>
     </label>
     <br>
     <label style="color: #009933;">Password:</label>
     <label>
-        <input type="text" th:field="*{password}" placeholder="Enter password"/>
+        <input type="text" th:field="*{password}" required th:value="${user.password}" placeholder="Enter password"/>
     </label>
     <br>
-        <div>
-            <label style="color: #009933;">Roles:</label>
-            <br/>
-                <select name="checkedIdRoles" size="1">
-                    <option th:each="role : ${rolesList}" th:value="${role.getId()}" th:text="${role.getName()}"></option>
-                </select>
-        </div>
+    <div>
+        <label style="color: #009933;">Roles:</label>
+        <label>
+            <select name="roleId" id="roleId">
+                <option th:each="role : ${rolesList}" th:value="${role.getId()}" th:text="${role.getName()}" th:selected="${user.roles.contains(role)}"></option>
+            </select>
+        </label>
+    </div>
     <br>
     <input type="submit" value="OK" onclick="window.location.href = '/admin/allUsers'">
 </form>

@@ -1,9 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,12 +10,10 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -37,23 +33,20 @@ public class AdminController {
         model.addAttribute("user", userService.findByEmail(principal.getName()));
         return "admin";
     }
-
     @GetMapping("/admin/allUsers")
     public String showAllUsers(Model model) {
         model.addAttribute("allUsers", userService.getAllUsers());
         model.addAttribute("allRoles", roleService.getAllRoles());
-        model.addAttribute("newUser", new User());
         return "user-view";
     }
 
     @GetMapping("/admin/addNewUser")
-    public String addNewUser(Model model) {
+    public String addNewUser(@ModelAttribute("user") User user, Model model) {
         model.addAttribute("rolesList", roleService.getAllRoles());
         return "user-info";
     }
-
     @PostMapping("/admin/addNewUser")
-    public String saveUser(@ModelAttribute("newUser") @Valid User user, BindingResult bindingResult, @RequestParam(value = "checkedIdRoles") List<Integer> checkedIdRoles) {
+    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @RequestParam(value = "checkedIdRoles") List<Integer> checkedIdRoles) {
         if (bindingResult.hasErrors()) {
             return "user-info";
         }
@@ -65,12 +58,19 @@ public class AdminController {
         userService.saveUser(user);
         return "redirect:/admin/allUsers";
     }
-    @GetMapping("/admin/updateInfo")
-    public String updateUser(@RequestParam("userId") long id, Model model) {
-        User user = userService.getUser(id);
-        model.addAttribute("user", user);
+    @GetMapping("/admin/updateInfo/{id}")
+    public String updateUser(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("user", userService.getUser(id));
         model.addAttribute("rolesList", roleService.getAllRoles());
-        return "user-info";
+        return "user-update";
+    }
+    @PostMapping("/admin/updateInform/{getId}")
+    public String updateInformUser(@PathVariable("getId") Long id, @ModelAttribute("user") User user, @RequestParam("roleId") Integer roleId) {
+        user.setId(id);
+        Role role = roleService.getRole(roleId);
+        user.setRoles(Collections.singletonList(role));
+        userService.saveUser(user);
+        return "redirect:/admin/allUsers";
     }
 
     @GetMapping("/admin/deleteUser")
