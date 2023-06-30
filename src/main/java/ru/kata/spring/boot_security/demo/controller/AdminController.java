@@ -50,12 +50,7 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "user-info";
         }
-        List<Role> roles = new ArrayList<>();
-        for (Integer id : checkedIdRoles) {
-            roles.add(roleService.getRole(id));
-            user.setRoles(roles);
-        }
-        userService.saveUser(user);
+        userService.saveUser(user, checkedIdRoles);
         return "redirect:/admin/allUsers";
     }
     @GetMapping("/admin/updateInfo/{id}")

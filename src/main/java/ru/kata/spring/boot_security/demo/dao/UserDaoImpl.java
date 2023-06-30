@@ -1,17 +1,22 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
     private final EntityManager entityManager;
+    private final RoleService roleService;
 
-    public UserDaoImpl(EntityManager entityManager) {
+    public UserDaoImpl(EntityManager entityManager, RoleService roleService) {
         this.entityManager = entityManager;
+        this.roleService = roleService;
     }
 
     @Override
@@ -21,7 +26,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void saveUser(User user) {
+    public void saveUser(User user, List<Integer> checkedIdRoles) {
+        List<Role> roles = new ArrayList<>();
+        for (Integer id : checkedIdRoles) {
+            roles.add(roleService.getRole(id));
+        }
+        user.setRoles(roles);
         entityManager.persist(user);
     }
 
