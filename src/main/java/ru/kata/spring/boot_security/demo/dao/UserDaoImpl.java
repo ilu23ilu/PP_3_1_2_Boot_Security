@@ -7,7 +7,9 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -26,9 +28,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void saveUser(User user, List<Integer> checkedIdRoles) {
-        List<Role> roles = new ArrayList<>();
-        for (Integer id : checkedIdRoles) {
+    public void saveUser(User user, List<Long> checkedIdRoles) {
+        Set<Role> roles = new HashSet<>();
+        for (Long id : checkedIdRoles) {
             roles.add(roleService.getRole(id));
         }
         user.setRoles(roles);

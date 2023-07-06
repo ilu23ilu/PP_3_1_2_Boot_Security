@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserDao {
     List<User> getAllUsers();
 
-    void saveUser(User user, List<Integer> checkedIdRoles);
+    void saveUser(User user, List<Long> checkedIdRoles);
     void updateUser(User user);
 
     User getUser(long id);

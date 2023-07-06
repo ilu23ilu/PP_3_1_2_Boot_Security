@@ -6,12 +6,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/")
@@ -47,7 +50,7 @@ public class AdminController {
 //    }
 //    return "user-add";
     @PostMapping("/admin/addNewUser")
-    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @RequestParam(value = "checkedIdRoles") List<Integer> checkedIdRoles) {
+    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @RequestParam(value = "checkedIdRoles") List<Long> checkedIdRoles) {
         if (bindingResult.hasErrors()) {
             return "bootstrap-admin-panel";
         }
@@ -61,9 +64,10 @@ public class AdminController {
         return "bootstrap-admin-panel";
     }
     @PostMapping("/admin/updateInform/{getId}")
-    public String updateInformUser(@PathVariable("getId") Long id, @ModelAttribute("user") User user, @RequestParam("roleId") Integer roleId) {
+    public String updateInformUser(@PathVariable("getId") Long id, @ModelAttribute("user") User user, @RequestParam("roleId") Long roleId) {
         user.setId(id);
-        user.setRoles(Collections.singletonList(roleService.getRole(roleId)));
+        Set<Role> roles = new HashSet<>(Collections.singletonList(roleService.getRole(roleId)));
+        user.setRoles(roles);
         userService.updateUser(user);
         return "redirect:/admin/allUsers";
     }

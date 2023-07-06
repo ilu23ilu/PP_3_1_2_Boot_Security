@@ -3,10 +3,9 @@ package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.User;
-
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -19,7 +18,7 @@ public class UserServiceImpl implements UserService {
         this.userDao = userDao;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
@@ -27,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(User user, List<Integer> checkedIdRoles) {
+    public void saveUser(User user, List<Long> checkedIdRoles) {
         userDao.saveUser(user, checkedIdRoles);
     }
 
@@ -37,7 +36,7 @@ public class UserServiceImpl implements UserService {
         userDao.updateUser(user);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public User getUser(long id) {
         return userDao.getUser(id);
